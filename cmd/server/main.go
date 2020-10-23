@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"cloud.google.com/go/datastore"
 	"github.com/gorilla/mux"
@@ -12,17 +13,21 @@ import (
 
 func main() {
 
-	r := mux.NewRouter()
+	router := mux.NewRouter()
 
 	// API endpoint
-	api := r.PathPrefix("/v1").Subrouter()
+	api := router.PathPrefix("/v1").Subrouter()
 
 	// Authority Management
 	api.HandleFunc("/authorities", NotImplemented).Methods(http.MethodGet)
 	api.HandleFunc("/authorities/{id}", NotImplemented).Methods(http.MethodGet)
 	api.HandleFunc("/authorities", NotImplemented).Methods(http.MethodPost)
 	api.HandleFunc("/authorities/{id}", NotImplemented).Methods(http.MethodDelete)
+
+	// Certificate Management
+	api.HandleFunc("/authorities/{id}/", NotImplemented).Methods(http.MethodGet)
 	api.HandleFunc("/authorities/{id}/sign", NotImplemented).Methods(http.MethodPost)
+	api.HandleFunc("/certificate/{serial}/revoke", NotImplemented).Methods(http.MethodPost)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
@@ -32,7 +37,11 @@ func main() {
 	}
 
 	srv := http.Server{
-		Addr: ":" + port,
+		Addr:           ":" + port,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   30 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+		Handler:        router,
 	}
 
 	err := srv.ListenAndServe()

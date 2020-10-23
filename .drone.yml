@@ -1,0 +1,20 @@
+---
+kind: pipeline
+type: docker
+name: test-linux-amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+# Pipeline is executed only on master branch
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: test
+    pull: always
+    image: golang:1.15
+    commands:
+      - go test ./...

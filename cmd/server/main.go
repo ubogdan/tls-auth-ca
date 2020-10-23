@@ -5,10 +5,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"strconv"
+	"syscall"
 	"time"
 
 	"cloud.google.com/go/datastore"
 	"github.com/gorilla/mux"
+	"github.com/oklog/run"
 )
 
 func main() {
@@ -31,9 +35,8 @@ func main() {
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
-	if port == "" {
+	if _, err := strconv.ParseInt(port, 10, 64); err != nil {
 		port = "8080"
-		log.Printf("defaulting to port %s", port)
 	}
 
 	srv := http.Server{
@@ -43,11 +46,32 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 		Handler:        router,
 	}
+	var g run.Group
 
-	err := srv.ListenAndServe()
-	if err != nil {
-		log.Fatalf("http.Listen %s", err)
+	ctx, cancel := context.WithCancel(context.Background())
+	// HTTP server
+	{
+		g.Add(func() error { return srv.ListenAndServe() }, func(error) { srv.Shutdown(ctx) })
 	}
+
+	// Signal Handler
+	{
+		g.Add(
+			func() error {
+				c := make(chan os.Signal, 1)
+				signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+				select {
+				case <-ctx.Done():
+					return nil
+				case <-c:
+					cancel()
+					log.Printf("Got to go.")
+					return nil
+				}
+			}, func(err error) {})
+	}
+	_ = g.Run()
+
 }
 
 func Datastore(ctx context.Context) (*datastore.Client, error) {

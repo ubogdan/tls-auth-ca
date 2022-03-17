@@ -14,7 +14,7 @@ COPY . ./
 # Build the binary.
 RUN go build -mod=readonly -v -o server github.com/ubogdan/tls-auth-ca/cmd/server
 
-FROM alpine:3.14
+FROM alpine:3.15
 
 # Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/server /app/server

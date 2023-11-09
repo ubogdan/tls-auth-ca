@@ -1,0 +1,50 @@
+repo_name: ubogdan/tls-auth-ca
+report_id: 11c441fc711a25441316914dfd344979
+repo_type: Public
+timestamp: '2023-11-09T21:53:51+00:00'
+requested_by: ubogdan
+provider: github
+branch: master
+detected_tools_count: 4
+tools:
+- name: Golang
+  description: An open source programming language that makes it easy to build simple,
+    reliable, and efficient software
+  website_url: http://golang.org/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1005/O6AczwfV_400x400.png
+  detection_source: Repo Metadata
+- name: Docker
+  description: Enterprise Container Platform for High-Velocity Innovation.
+  website_url: https://www.docker.com/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Virtual Machine Platforms & Containers
+  image_url: https://img.stackshare.io/service/586/n4u37v9t_400x400.png
+  detection_source: Repo Metadata
+- name: Drone.io
+  description: Open source continuous integration platform built on Docker
+  website_url: https://drone.io/
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Continuous Integration
+  image_url: https://img.stackshare.io/service/668/R_wMcCqN_400x400.png
+  detection_source: ".drone.yml"
+  last_updated_by: Bogdan Ungureanu
+  last_updated_on: 2020-10-23 17:28:40.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
